@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 //import components
 import Home from "./pages/Home";
+//style
+import GlobalStyle from "./components/GlobalStyle";
+
 function App() {
 
   return (
     <div className="App">
-      <h1>Hello Ignite</h1>
+      <GlobalStyle />
       <Home />
     </div>
   );
