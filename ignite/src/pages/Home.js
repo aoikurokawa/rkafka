@@ -8,6 +8,10 @@ import { loadGames } from "../actions/gamesAction";
 //components
 import Game from "../components/Game";
 import GameDetail from "../components/GameDetail";
+//animation
+import { fadeIn, popup } from "../animation";
+//antd
+
 
 const Home = () => {
   //get the current location
@@ -25,7 +29,7 @@ const Home = () => {
 
   return (
     <div>
-      <GameList>
+      <GameList variants={fadeIn} initial="hidden" animate="show">
         <AnimateSharedLayout type="crossfade">
           <AnimatePresence>
             {pathId && <GameDetail pathId={pathId} />}
