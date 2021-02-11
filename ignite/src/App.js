@@ -7,6 +7,7 @@ import GlobalStyle from "./components/GlobalStyle";
 //router
 import { Route } from "react-router-dom";
 
+
 function App() {
   return (
     <div className="App">

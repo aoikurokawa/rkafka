@@ -2,6 +2,7 @@ const initState = {
   popular: [],
   newGames: [],
   upcoming: [],
+  isloaded: true,
   searched: [],
 };
 
@@ -13,6 +14,7 @@ const gameRreducer = (state = initState, action) => {
         popular: action.payload.popular,
         upcoming: action.payload.upcoming,
         newGames: action.payload.newGames,
+        isloaded: false,
       };
 
     case "FETCH_SEARCHED":

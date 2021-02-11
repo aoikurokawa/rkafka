@@ -3,9 +3,8 @@ import React from "react";
 //styling and animation
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { smallImage } from "../util";
 //import redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 //images
 import playstation from "../img/playstation.svg";
@@ -17,8 +16,14 @@ import gamepad from "../img/gamepad.svg";
 //star
 import starFull from "../img/star-full.png";
 import starEmpty from "../img/star-empty.png";
+//antd
+import "antd/dist/antd.css";
+import { Spin } from "antd";
 
-const GameDetail = ({ pathId }) => {
+const GameDetail = ({ pathId, getDetail }) => {
+  //dispatch
+  const dispatch = useDispatch();
+
   const histry = useHistory();
   //exit detail
   const exitDetailHandler = (e) => {
@@ -26,6 +31,7 @@ const GameDetail = ({ pathId }) => {
     if (element.classList.contains("shadow")) {
       document.body.style.overflow = "auto";
       histry.push("/");
+      dispatch({ type: "CLEAR_DETAIL" });
     }
   };
   //get platform images
@@ -67,44 +73,51 @@ const GameDetail = ({ pathId }) => {
       {!isLoading && (
         <CardShadow className="shadow" onClick={exitDetailHandler}>
           <Detail layoutId={pathId}>
-            <Stats>
-              <div className="rating">
-                <motion.h3 layoutId={`title ${pathId}`}>{game.name}</motion.h3>
-                <p>{game.rating}</p>
-                {getStar()}
-              </div>
-              <Info>
-                <h3>Platforms</h3>
-                <Platforms>
-                  {game.platforms.map((data) => (
-                    <img
-                      key={data.platform.id}
-                      src={getPlatForm(data.platform.name)}
-                      alt={data.platform.name}
-                    ></img>
+            {getDetail ? (
+              <>
+                <Stats>
+                  <div className="rating">
+                    <motion.h3 layoutId={`title ${pathId}`}>
+                      {game.name}
+                    </motion.h3>
+                    <p>{game.rating}</p>
+                    {getStar()}
+                  </div>
+                  <Info>
+                    <h3>Platforms</h3>
+                    <Platforms>
+                      {game.platforms.map((data) => (
+                        <img
+                          key={data.platform.id}
+                          src={getPlatForm(data.platform.name)}
+                          alt={data.platform.name}
+                        ></img>
+                      ))}
+                    </Platforms>
+                  </Info>
+                </Stats>
+
+                <Media>
+                  <motion.img
+                    layoutId={`image ${pathId}`}
+                    src={game.background_image}
+                    alt="image"
+                  />
+                </Media>
+                <Description>
+                  <p>{game.description_raw}</p>
+                </Description>
+                <div className="gallery">
+                  {screen.results.map((screen) => (
+                    <img src={screen.image} key={screen.id} alt="game" />
                   ))}
-                </Platforms>
-              </Info>
-            </Stats>
-            <Media>
-              <motion.img
-                layoutId={`image ${pathId}`}
-                src={smallImage(game.background_image, 1280)}
-                alt="image"
-              />
-            </Media>
-            <Description>
-              <p>{game.description_raw}</p>
-            </Description>
-            <div className="gallery">
-              {screen.results.map((screen) => (
-                <img
-                  src={smallImage(screen.image, 1280)}
-                  key={screen.id}
-                  alt="game"
-                />
-              ))}
-            </div>
+                </div>
+              </>
+            ) : (
+              <StyledSpin>
+                <Spin />
+              </StyledSpin>
+            )}
           </Detail>
         </CardShadow>
       )}
@@ -178,6 +191,13 @@ const Media = styled(motion.div)`
 
 const Description = styled(motion.div)`
   margin: 5rem 0rem;
+`;
+
+const StyledSpin = styled.div`
+  justify-content: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
 `;
 
 export default GameDetail;
