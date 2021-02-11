@@ -19,7 +19,9 @@ const Home = () => {
     dispatch(loadGames());
   }, [dispatch]);
   //get that data back
-  const { popular, newGames, upcoming } = useSelector((state) => state.games);
+  const { popular, newGames, upcoming, searched } = useSelector(
+    (state) => state.games
+  );
 
   return (
     <div>
@@ -28,6 +30,24 @@ const Home = () => {
           <AnimatePresence>
             {pathId && <GameDetail pathId={pathId} />}
           </AnimatePresence>
+          {searched.length ? (
+            <div className="searched">
+              <h2>Searched Games</h2>
+              <Games>
+                {searched.map((game) => (
+                  <Game
+                    name={game.name}
+                    released={game.released}
+                    id={game.id}
+                    image={game.background_image}
+                    key={game.id}
+                  />
+                ))}
+              </Games>
+            </div>
+          ) : (
+            ""
+          )}
           <h2>Upcoming Games</h2>
           <Games>
             {upcoming.map((game) => (
