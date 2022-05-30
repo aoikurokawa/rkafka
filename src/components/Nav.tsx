@@ -12,19 +12,19 @@ const Nav = () => {
   const dispatch = useDispatch();
   const [textInput, setTextInput] = useState("");
 
-  const inputHandler = (e) => {
+  const inputHandler = (e: any) => {
     setTextInput(e.target.value);
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: any) => {
     e.preventDefault();
     dispatch(fetchSearch(textInput));
     setTextInput("");
   };
 
   const clearSearched = () => {
-    dispatch({type: "CLEAR_SEARCHED"});
-  }
+    dispatch({ type: "CLEAR_SEARCHED" });
+  };
 
   return (
     <StyledNav variants={fadeIn} initial="hidden" animate="show">

@@ -10,9 +10,15 @@ import thunk from "redux-thunk";
 //react-router-dom
 import { BrowserRouter } from "react-router-dom";
 
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE___?: typeof compose;
+  }
+}
+
 const composeEnhancers =
   (typeof window !== "undefined" &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE___) ||
   compose;
 
 const store = createStore(

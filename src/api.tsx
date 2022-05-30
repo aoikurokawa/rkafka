@@ -43,12 +43,12 @@ export const upComingGamesUrl = () => `${base_url}${upcoming_games}`;
 export const newGamesUrl = () => `${base_url}${newGames}`;
 
 //game details
-export const gameDetailsUrl = (game_id) => `${base_url}games/${game_id}`;
+export const gameDetailsUrl = (game_id: any) => `${base_url}games/${game_id}`;
 
 //game screenshots
-export const gameScreenshotUrl = (game_id) =>
+export const gameScreenshotUrl = (game_id: any) =>
   `${base_url}games/${game_id}/screenshots`;
 
 //searched games
-export const searchGameUrl = (game_name) =>
+export const searchGameUrl = (game_name: any) =>
   `${base_url}games?search=${game_name}&pagexize=9`;

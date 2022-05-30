@@ -20,13 +20,18 @@ import starEmpty from "../img/star-empty.png";
 import "antd/dist/antd.css";
 import { Spin } from "antd";
 
-const GameDetail = ({ pathId, getDetail }) => {
+interface GameDetailProps {
+  pathId: any;
+  getDetail: any;
+}
+
+const GameDetail: React.FC<GameDetailProps> = ({ pathId, getDetail }) => {
   //dispatch
   const dispatch = useDispatch();
 
   const histry = useHistory();
   //exit detail
-  const exitDetailHandler = (e) => {
+  const exitDetailHandler = (e: any) => {
     const element = e.target;
     if (element.classList.contains("shadow")) {
       document.body.style.overflow = "auto";
@@ -35,7 +40,7 @@ const GameDetail = ({ pathId, getDetail }) => {
     }
   };
   //get platform images
-  const getPlatForm = (platform) => {
+  const getPlatForm = (platform: any) => {
     switch (platform) {
       case "Plastation 4":
         return playstation;
@@ -66,6 +71,7 @@ const GameDetail = ({ pathId, getDetail }) => {
   };
 
   //data
+  //@ts-ignore
   const { screen, game, isLoading } = useSelector((state) => state.detail);
 
   return (
@@ -86,7 +92,7 @@ const GameDetail = ({ pathId, getDetail }) => {
                   <Info>
                     <h3>Platforms</h3>
                     <Platforms>
-                      {game.platforms.map((data) => (
+                      {game.platforms.map((data: any) => (
                         <img
                           key={data.platform.id}
                           src={getPlatForm(data.platform.name)}
@@ -108,7 +114,7 @@ const GameDetail = ({ pathId, getDetail }) => {
                   <p>{game.description_raw}</p>
                 </Description>
                 <div className="gallery">
-                  {screen.results.map((screen) => (
+                  {screen.results.map((screen: any) => (
                     <img src={screen.image} key={screen.id} alt="game" />
                   ))}
                 </div>

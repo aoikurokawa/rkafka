@@ -9,7 +9,14 @@ import { Link } from "react-router-dom";
 //animation
 import { popup } from "../animation";
 
-const Game = ({ name, released, image, id }) => {
+interface GameProps {
+  name: any;
+  released: any;
+  image: any;
+  id: any;
+}
+
+const Game: React.FC<GameProps> = ({ name, released, image, id }) => {
   const stringPathId = id.toString();
   //load details handler
   const dispatch = useDispatch();
@@ -19,15 +26,17 @@ const Game = ({ name, released, image, id }) => {
   };
 
   return (
-    <StyledGames variants={popup} initial="hidden" animate="show" layoutId={stringPathId} onClick={loadDetailHandler}>
+    <StyledGames
+      variants={popup}
+      initial="hidden"
+      animate="show"
+      layoutId={stringPathId}
+      onClick={loadDetailHandler}
+    >
       <Link to={`/game/${id}`}>
         <motion.h3 layoutId={`title ${stringPathId}`}>{name}</motion.h3>
         <p>{released}</p>
-        <motion.img
-          layoutId={`image ${stringPathId}`}
-          src={image}
-          alt={name}
-        />
+        <motion.img layoutId={`image ${stringPathId}`} src={image} alt={name} />
       </Link>
     </StyledGames>
   );

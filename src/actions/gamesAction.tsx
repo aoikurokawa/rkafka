@@ -23,7 +23,7 @@ export const loadGames = () => async (dispatch: any) => {
   });
 };
 
-export const fetchSearch = (game_name) => async (dispatch) => {
+export const fetchSearch = (game_name: any) => async (dispatch: any) => {
   const searchGames = await axios.get(searchGameUrl(game_name));
 
   dispatch({
