@@ -1,2 +1,2 @@
-export * from "./restaking";
-export * from "./vault";
+export * as restaking from "./restaking";
+export * as vault from "./vault";
