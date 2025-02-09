@@ -85,7 +85,7 @@ export class OperatorVaultTicket implements OperatorVaultTicketArgs {
         `Unable to find OperatorVaultTicket account at ${address}`,
       );
     }
-    return OperatorVaultTicket.fromAccountInfo(accountInfo, 0)[0];
+    return OperatorVaultTicket.fromAccountInfo(accountInfo, 8)[0];
   }
 
   /**
