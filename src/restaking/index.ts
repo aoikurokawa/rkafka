@@ -5,7 +5,10 @@ export * from "./instructions";
 export * from "./types";
 
 const CONFIG_SEED = "config";
+
 const OPERATOR_SEED = "operator";
+const OPERATOR_VAULT_TICKET = "operator_vault_ticket";
+
 const NCN_SEED = "ncn";
 
 /**
@@ -47,6 +50,22 @@ export const findOperatorPDA = (base: PublicKey) => {
 
   const [pda, bump] = PublicKey.findProgramAddressSync(
     [seedBuffer, baseBuffer],
+    PROGRAM_ID,
+  );
+
+  return { pda, bump, seeds: [seedBuffer] };
+};
+
+/**
+ * Restaking Operator Vault Ticket public key
+ */
+export const findOperatorVaultTicketPDA = (operator: PublicKey, vault: PublicKey) => {
+  const seedBuffer = Buffer.from(OPERATOR_VAULT_TICKET, "utf8");
+  const operatorBuffer = operator.toBuffer();
+  const vaultBuffer = vault.toBuffer();
+
+  const [pda, bump] = PublicKey.findProgramAddressSync(
+    [seedBuffer, operatorBuffer, vaultBuffer],
     PROGRAM_ID,
   );
 
