@@ -37,6 +37,9 @@ export const findConfigPDA = () => {
   return { pda, bump, seeds: [seedBuffer] };
 };
 
+/**
+ * Vault public key
+ */
 export const findVaultPDA = (base: PublicKey) => {
   const seedBuffer = Buffer.from(VAULT_SEED, "utf8");
   const baseBuffer = base.toBuffer();

@@ -85,7 +85,7 @@ export class Config implements ConfigArgs {
     if (accountInfo == null) {
       throw new Error(`Unable to find Config account at ${address}`);
     }
-    return Config.fromAccountInfo(accountInfo, 0)[0];
+    return Config.fromAccountInfo(accountInfo, 8)[0];
   }
 
   /**
