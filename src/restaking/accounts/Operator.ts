@@ -103,7 +103,7 @@ export class Operator implements OperatorArgs {
     if (accountInfo == null) {
       throw new Error(`Unable to find Operator account at ${address}`);
     }
-    return Operator.fromAccountInfo(accountInfo, 0)[0];
+    return Operator.fromAccountInfo(accountInfo, 8)[0];
   }
 
   /**
