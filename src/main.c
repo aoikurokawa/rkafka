@@ -1,11 +1,14 @@
 #include <stdio.h>
 
-void does_not_exist(char name[]) {
-	printf("%s\n", name);
-}
-
 int main() {
-	printf("starting sneklang tools\n");
-	does_not_exist("uh oh");
-	printf("finished sneklang tools\n");
+  /*
+    Sneklang is for nvim enjoyers
+    who want to write their own garbage
+    collectors instead of using off-the-shelf
+    solutions
+  */
+  printf("i use sneklang btw\n");
+  printf("i use nvim btw\n");
+  printf("i use arch btw\n");
+  return 0;
 }
