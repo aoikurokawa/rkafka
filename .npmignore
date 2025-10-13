@@ -1,6 +1,0 @@
-node_modules
-dist
-tsconfig.json
-yarn.lock
-.npmrc
-.gitignore
