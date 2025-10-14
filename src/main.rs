@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Context};
+use anyhow::anyhow;
 use std::{
     io::{Read, Write},
     net::TcpListener,
@@ -46,7 +46,9 @@ fn main() -> anyhow::Result<()> {
                 let _size = stream.read_to_end(&mut body_buf)?;
 
                 if matches!(request_header.request_api_key, ApiKey::ApiVersions) {
-                    stream.write_all(&mut [35]).unwrap();
+                    stream.write_all(&0i32.to_be_bytes())?;
+                    stream.write_all(&correlation_id.to_be_bytes())?;
+                    stream.write_all(&[0, 35])?;
                 }
 
                 println!("accepted new connection");
