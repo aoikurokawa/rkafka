@@ -45,11 +45,11 @@ fn main() -> anyhow::Result<()> {
                 let mut body_buf = Vec::new();
                 let _size = stream.read_to_end(&mut body_buf)?;
 
-                if matches!(request_header.request_api_key, ApiKey::ApiVersions) {
-                    stream.write_all(&0i32.to_be_bytes())?;
-                    stream.write_all(&correlation_id.to_be_bytes())?;
-                    stream.write_all(&[0, 35])?;
-                }
+                // if matches!(request_header.request_api_key, ApiKey::ApiVersions) {
+                stream.write_all(&0i32.to_be_bytes())?;
+                stream.write_all(&correlation_id.to_be_bytes())?;
+                stream.write_all(&[0, 35])?;
+                // }
 
                 println!("accepted new connection");
             }
