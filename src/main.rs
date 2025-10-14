@@ -45,23 +45,9 @@ fn main() -> anyhow::Result<()> {
                 let mut body_buf = Vec::new();
                 let _size = stream.read_to_end(&mut body_buf)?;
 
-                println!(
-                    "Request API version: {}",
-                    request_header.request_api_version
-                );
-
-                stream
-                    .write_all(&mut [
-                        0,
-                        0,
-                        0,
-                        0,
-                        message_buf[4],
-                        message_buf[5],
-                        message_buf[6],
-                        message_buf[7],
-                    ])
-                    .unwrap();
+                if matches!(request_header.request_api_key, ApiKey::ApiVersions) {
+                    stream.write_all(&mut [35]).unwrap();
+                }
 
                 println!("accepted new connection");
             }
