@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 #[repr(i16)]
 pub enum ApiKey {
     Produce = 0,
