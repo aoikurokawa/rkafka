@@ -1,8 +1,9 @@
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
+#[repr(i16)]
 pub enum ErrorCode {
-    UNKNOWN_SERVER_ERROR = -1,
+    UnknownServerError = -1,
 
     NONE = 0,
 
-    UNSUPPORTED_VERSION = 35,
+    UnsupportedVersion = 35,
 }
