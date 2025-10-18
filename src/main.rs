@@ -31,8 +31,8 @@ fn main() -> anyhow::Result<()> {
                     continue;
                 }
 
-                let mut body_buf = Vec::new();
-                let _size = stream.read_to_end(&mut body_buf)?;
+                // let mut body_buf = Vec::new();
+                // let _size = stream.read_to_end(&mut body_buf)?;
 
                 let request = Request::new(request_message_size, message_buf.as_slice())?;
 
@@ -41,8 +41,7 @@ fn main() -> anyhow::Result<()> {
 
                 let response_bytes = response.to_bytes();
                 stream.write_all(&response_bytes)?;
-
-                println!("accepted new connection");
+                stream.flush()?;
             }
             Err(e) => {
                 println!("error: {}", e);
