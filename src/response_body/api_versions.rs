@@ -10,6 +10,9 @@ pub struct ApiSupport {
 
     /// The maximum supported version, inclusive
     pub max_version: i16,
+
+    /// Tag buffer
+    pub tag_buffer: u8,
 }
 
 #[derive(Debug)]
@@ -43,6 +46,7 @@ impl Body for ApiVersionsResponse {
 
             bytes.extend_from_slice(&api.min_version.to_be_bytes());
             bytes.extend_from_slice(&api.max_version.to_be_bytes());
+            bytes.extend_from_slice(&api.tag_buffer.to_be_bytes());
         }
 
         bytes.extend_from_slice(&self.throttle_time_ms.to_be_bytes());
@@ -66,8 +70,9 @@ impl Body for ApiVersionsResponse {
 
                 let min_version_len = key.min_version.to_be_bytes().len() as u32;
                 let max_version_len = key.max_version.to_be_bytes().len() as u32;
+                let tag_buffer_len = key.tag_buffer.to_be_bytes().len() as u32;
 
-                api_key_len + min_version_len + max_version_len
+                api_key_len + min_version_len + max_version_len + tag_buffer_len
             })
             .sum();
 
@@ -86,6 +91,7 @@ impl ApiVersionsResponse {
                 api_key: ApiKey::ApiVersions,
                 min_version: 0,
                 max_version: 4,
+                tag_buffer: 0,
             }],
             throttle_time_ms: 0,
             tag_buffer: 0,
