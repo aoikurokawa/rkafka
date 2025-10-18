@@ -1,4 +1,4 @@
-use crate::{body::Body, header::Header};
+use crate::{body::Body, header::ResponseHeader};
 
 pub struct Response<B: Body> {
     /// The message_size field gives the size of the subsequent request or response message in bytes.
@@ -6,14 +6,15 @@ pub struct Response<B: Body> {
     message_size: u32,
 
     /// Header
-    header: Header,
+    header: ResponseHeader,
 
     /// Body
     body: B,
 }
 
 impl<B: Body> Response<B> {
-    pub fn new(message_size: u32, header: Header, body: B) -> Self {
+    pub fn new(message_size: u32, correlation_id: i32, body: B) -> Self {
+        let header = ResponseHeader::new(correlation_id);
         Self {
             message_size,
             header,

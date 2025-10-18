@@ -37,7 +37,8 @@ fn main() -> anyhow::Result<()> {
                 let request = Request::new(request_message_size, message_buf.as_slice())?;
 
                 let api_versions_response = ApiVersionsResponse::new(ErrorCode::UnsupportedVersion);
-                let response = Response::new(0, request.header, api_versions_response);
+                let response =
+                    Response::new(0, request.header.correlation_id, api_versions_response);
 
                 let response_bytes = response.to_bytes();
                 stream.write_all(&response_bytes)?;
