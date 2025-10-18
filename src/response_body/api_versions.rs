@@ -20,6 +20,9 @@ pub struct ApiVersionsResponse {
     /// The APIs supported by the broker
     pub api_keys: Vec<ApiSupport>,
 
+    /// The duration in milliseconds for which the request was throttled due to a quota violation, or zero if the request did not violate any quota.
+    pub throttle_time_ms: i32,
+
     /// Tag buffer
     pub tag_buffer: u8,
 }
@@ -42,6 +45,7 @@ impl Body for ApiVersionsResponse {
             bytes.extend_from_slice(&api.max_version.to_be_bytes());
         }
 
+        bytes.extend_from_slice(&self.throttle_time_ms.to_be_bytes());
         bytes.extend_from_slice(&self.tag_buffer.to_be_bytes());
 
         bytes
@@ -67,9 +71,10 @@ impl Body for ApiVersionsResponse {
             })
             .sum();
 
+        let throttle_time_ms_len = self.throttle_time_ms.to_be_bytes().len() as u32;
         let tag_buffer_len = self.tag_buffer.to_be_bytes().len() as u32;
 
-        error_code_len + array_len_prefix + api_keys_len + tag_buffer_len
+        error_code_len + array_len_prefix + api_keys_len + throttle_time_ms_len + tag_buffer_len
     }
 }
 
@@ -82,6 +87,7 @@ impl ApiVersionsResponse {
                 min_version: 0,
                 max_version: 4,
             }],
+            throttle_time_ms: 0,
             tag_buffer: 0,
         }
     }
