@@ -19,6 +19,9 @@ pub struct ApiVersionsResponse {
 
     /// The APIs supported by the broker
     pub api_keys: Vec<ApiSupport>,
+
+    /// Tag buffer
+    pub tag_buffer: u8,
 }
 
 impl Body for ApiVersionsResponse {
@@ -35,6 +38,8 @@ impl Body for ApiVersionsResponse {
             bytes.extend_from_slice(&api.min_version.to_be_bytes());
             bytes.extend_from_slice(&api.max_version.to_be_bytes());
         }
+
+        bytes.extend_from_slice(&self.tag_buffer.to_be_bytes());
 
         bytes
     }
@@ -57,7 +62,9 @@ impl Body for ApiVersionsResponse {
             })
             .sum();
 
-        error_code_len + api_keys_len
+        let tag_buffer_len = self.tag_buffer.to_be_bytes().len() as u32;
+
+        error_code_len + api_keys_len + tag_buffer_len
     }
 }
 
@@ -70,6 +77,7 @@ impl ApiVersionsResponse {
                 min_version: 0,
                 max_version: 4,
             }],
+            tag_buffer: 0,
         }
     }
 }
