@@ -41,8 +41,7 @@ fn main() -> anyhow::Result<()> {
 
                 let response_bytes = response.to_bytes();
                 stream.write_all(&response_bytes)?;
-
-                println!("accepted new connection");
+                stream.flush()?;
             }
             Err(e) => {
                 println!("error: {}", e);
