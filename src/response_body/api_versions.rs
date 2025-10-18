@@ -31,6 +31,9 @@ impl Body for ApiVersionsResponse {
         let error_code = self.error_code as i16;
         bytes.extend_from_slice(&error_code.to_be_bytes());
 
+        let array_len = (self.api_keys.len() + 1) as u8;
+        bytes.push(array_len);
+
         for api in self.api_keys.iter() {
             let api_key = api.api_key as i16;
             bytes.extend_from_slice(&api_key.to_be_bytes());
