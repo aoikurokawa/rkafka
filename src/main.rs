@@ -4,7 +4,7 @@ use std::{
 };
 
 use rkafka::{
-    error_code::ErrorCode, request::Request, response::Response,
+    api_key::ApiKey, error_code::ErrorCode, request::Request, response::Response,
     response_body::api_versions::ApiVersionsResponse,
 };
 
@@ -33,12 +33,20 @@ fn main() -> anyhow::Result<()> {
 
                 let request = Request::new(request_message_size, message_buf.as_slice())?;
 
-                let api_versions_response = ApiVersionsResponse::new(ErrorCode::NONE);
-                let response = Response::new(request.header.correlation_id, api_versions_response);
+                if let ApiKey::ApiVersions = request.header.api_key {
+                    let response = if request.header.api_version <= 4 {
+                        let api_versions_response = ApiVersionsResponse::new(ErrorCode::NONE);
+                        Response::new(request.header.correlation_id, api_versions_response)
+                    } else {
+                        let api_versions_response =
+                            ApiVersionsResponse::new(ErrorCode::UnsupportedVersion);
+                        Response::new(request.header.correlation_id, api_versions_response)
+                    };
 
-                let response_bytes = response.to_bytes();
-                stream.write_all(&response_bytes)?;
-                stream.flush()?;
+                    let response_bytes = response.to_bytes();
+                    stream.write_all(&response_bytes)?;
+                    stream.flush()?;
+                }
             }
             Err(e) => {
                 println!("error: {}", e);
