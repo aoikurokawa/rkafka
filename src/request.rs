@@ -46,6 +46,8 @@ impl Request {
 
         let header = RequestHeader::new(api_key, request_api_version, correlation_id);
 
+        let _body_buf = [8..];
+
         Ok(Self {
             message_size,
             header,
