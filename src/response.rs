@@ -13,8 +13,11 @@ pub struct Response<B: Body> {
 }
 
 impl<B: Body> Response<B> {
-    pub fn new(message_size: u32, correlation_id: i32, body: B) -> Self {
+    pub fn new(correlation_id: i32, body: B) -> Self {
         let header = ResponseHeader::new(correlation_id);
+
+        let message_size = header.size() + body.size();
+
         Self {
             message_size,
             header,

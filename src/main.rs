@@ -31,14 +31,10 @@ fn main() -> anyhow::Result<()> {
                     continue;
                 }
 
-                // let mut body_buf = Vec::new();
-                // let _size = stream.read_to_end(&mut body_buf)?;
-
                 let request = Request::new(request_message_size, message_buf.as_slice())?;
 
-                let api_versions_response = ApiVersionsResponse::new(ErrorCode::UnsupportedVersion);
-                let response =
-                    Response::new(0, request.header.correlation_id, api_versions_response);
+                let api_versions_response = ApiVersionsResponse::new(ErrorCode::NONE);
+                let response = Response::new(request.header.correlation_id, api_versions_response);
 
                 let response_bytes = response.to_bytes();
                 stream.write_all(&response_bytes)?;

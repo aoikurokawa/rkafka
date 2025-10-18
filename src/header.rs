@@ -53,4 +53,8 @@ impl ResponseHeader {
 
         bytes
     }
+
+    pub fn size(&self) -> u32 {
+        self.correlation_id.to_be_bytes().len() as u32
+    }
 }
