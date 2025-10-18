@@ -51,6 +51,8 @@ impl Body for ApiVersionsResponse {
         let error_code = self.error_code as i16;
         let error_code_len = error_code.to_be_bytes().len() as u32;
 
+        let array_len_prefix = 1;
+
         let api_keys_len: u32 = self
             .api_keys
             .iter()
@@ -67,7 +69,7 @@ impl Body for ApiVersionsResponse {
 
         let tag_buffer_len = self.tag_buffer.to_be_bytes().len() as u32;
 
-        error_code_len + api_keys_len + tag_buffer_len
+        error_code_len + array_len_prefix + api_keys_len + tag_buffer_len
     }
 }
 
