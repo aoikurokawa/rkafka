@@ -31,8 +31,8 @@ fn main() -> anyhow::Result<()> {
                     continue;
                 }
 
-                let mut body_buf = Vec::new();
-                let _size = stream.read_to_end(&mut body_buf)?;
+                // let mut body_buf = Vec::new();
+                // let _size = stream.read_to_end(&mut body_buf)?;
 
                 let request = Request::new(request_message_size, message_buf.as_slice())?;
 
