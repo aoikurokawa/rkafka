@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 
-use crate::{api_key::ApiKey, header::Header};
+use crate::{api_key::ApiKey, header::RequestHeader};
 
 #[derive(Debug)]
 pub struct Request {
@@ -9,7 +9,7 @@ pub struct Request {
     pub message_size: u32,
 
     /// Header
-    pub header: Header,
+    pub header: RequestHeader,
     // Body
 }
 
@@ -44,7 +44,7 @@ impl Request {
             message_buf[7],
         ]);
 
-        let header = Header::new(api_key, request_api_version, correlation_id);
+        let header = RequestHeader::new(api_key, request_api_version, correlation_id);
 
         Ok(Self {
             message_size,
