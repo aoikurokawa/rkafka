@@ -8,7 +8,8 @@ use rkafka::{
     response_body::api_versions::ApiVersionsResponse,
 };
 
-fn main() -> anyhow::Result<()> {
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     println!("Logs from your program will appear here!");
 
