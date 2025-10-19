@@ -87,12 +87,20 @@ impl ApiVersionsResponse {
     pub fn new(error_code: ErrorCode) -> Self {
         Self {
             error_code,
-            api_keys: vec![ApiSupport {
-                api_key: ApiKey::ApiVersions,
-                min_version: 0,
-                max_version: 4,
-                tag_buffer: 0,
-            }],
+            api_keys: vec![
+                ApiSupport {
+                    api_key: ApiKey::ApiVersions,
+                    min_version: 0,
+                    max_version: 4,
+                    tag_buffer: 0,
+                },
+                ApiSupport {
+                    api_key: ApiKey::DescribeTopicPartitions,
+                    min_version: 0,
+                    max_version: 4,
+                    tag_buffer: 0,
+                },
+            ],
             throttle_time_ms: 0,
             tag_buffer: 0,
         }
