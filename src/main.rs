@@ -1,6 +1,7 @@
 use std::{
     io::{Read, Write},
-    net::TcpListener,
+    net::{TcpListener, TcpStream},
+    thread,
 };
 
 use rkafka::{
@@ -18,41 +19,66 @@ async fn main() -> anyhow::Result<()> {
 
     for stream in listener.incoming() {
         match stream {
-            Ok(mut stream) => {
-                let mut size_buf = [0; 4];
-                if let Err(e) = stream.read_exact(&mut size_buf) {
-                    println!("Error reading message size: {e}");
-                    continue;
-                }
-                let request_message_size = u32::from_be_bytes(size_buf);
-
-                let mut message_buf = vec![0; request_message_size as usize];
-                if let Err(e) = stream.read_exact(&mut message_buf) {
-                    println!("Error reading message: {e}");
-                    continue;
-                }
-
-                let request = Request::new(request_message_size, message_buf.as_slice())?;
-
-                if let ApiKey::ApiVersions = request.header.api_key {
-                    let response = if request.header.api_version <= 4 {
-                        let api_versions_response = ApiVersionsResponse::new(ErrorCode::NONE);
-                        Response::new(request.header.correlation_id, api_versions_response)
-                    } else {
-                        let api_versions_response =
-                            ApiVersionsResponse::new(ErrorCode::UnsupportedVersion);
-                        Response::new(request.header.correlation_id, api_versions_response)
-                    };
-
-                    let response_bytes = response.to_bytes();
-                    stream.write_all(&response_bytes)?;
-                    stream.flush()?;
-                }
+            Ok(stream) => {
+                thread::spawn(move || {
+                    if let Err(e) = handle_connection(stream) {
+                        println!("Connection error: {e}");
+                    }
+                });
             }
             Err(e) => {
                 println!("error: {}", e);
             }
         }
+    }
+
+    Ok(())
+}
+
+fn handle_connection(mut stream: TcpStream) -> anyhow::Result<()> {
+    loop {
+        // Read message size (4 bytes)
+        let mut size_buf = [0; 4];
+        match stream.read_exact(&mut size_buf) {
+            Ok(_) => {}
+            Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                println!("Connection closed");
+                break;
+            }
+            Err(e) => return Err(e.into()),
+        }
+
+        let request_message_size = u32::from_be_bytes(size_buf);
+
+        // Read the message body
+        let mut message_buf = vec![0; request_message_size as usize];
+        stream.read_exact(&mut message_buf)?;
+
+        // Parse the request
+        let request = Request::new(request_message_size, message_buf.as_slice())?;
+
+        println!(
+            "Received {:?} request (correlation_id: {})",
+            request.header.api_key, request.header.correlation_id
+        );
+
+        // Handle different API keys
+
+        if let ApiKey::ApiVersions = request.header.api_key {
+            let response = if request.header.api_version <= 4 {
+                let api_versions_response = ApiVersionsResponse::new(ErrorCode::NONE);
+                Response::new(request.header.correlation_id, api_versions_response)
+            } else {
+                let api_versions_response = ApiVersionsResponse::new(ErrorCode::UnsupportedVersion);
+                Response::new(request.header.correlation_id, api_versions_response)
+            };
+
+            // Send response
+            stream.write_all(&response.to_bytes())?;
+            stream.flush()?;
+        }
+
+        println!("Response sent");
     }
 
     Ok(())
